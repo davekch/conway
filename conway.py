@@ -1,13 +1,15 @@
+import random
+
 class grid:
     def __init__(self, x,y):
         self.width  = x
         self.height = y
         self.alive = [[]]
 
-    def populate(self):
+    def randomPopulate(self):
         for i in range(width):
             for j in range(height):
-                alive[i][j] = True
+                alive[i][j] = random.uniform(0., 1.) < 0.5
 
     def countLiveNeighbours(self, i,j):
         liveNeighbours=0
@@ -30,7 +32,7 @@ class grid:
                     if self.countLiveNeighbours(i,j) < 2:
                         updated[i][j] = False
                     # if more than 3 live neighbours, cell dies
-                    else if self.countLiveNeighbours(i,j) > 3:
+                    elif self.countLiveNeighbours(i,j) > 3:
                         updated[i][j] = False
                 else:
                     # if 3 live neighbours, cell comes to live
