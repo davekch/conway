@@ -1,15 +1,15 @@
 import random
+from matplotlib import pyplot as plt
 
 class grid:
     def __init__(self, x,y):
         self.width  = x
         self.height = y
-        self.alive = [[]]
+        self.alive = []
 
-    def randomPopulate(self):
-        for i in range(width):
-            for j in range(height):
-                alive[i][j] = random.uniform(0., 1.) < 0.5
+    def randomPopulate(self, density):
+        for i in range(self.width):
+            self.alive.append( [ random.uniform(0.,1.)<density for i in range(self.height) ] )
 
     def countLiveNeighbours(self, i,j):
         liveNeighbours=0
@@ -17,17 +17,17 @@ class grid:
             for dj in range(-1,2):
                 if (not (di==0 and dj==0)):
                     try:
-                        if alive[i+di][j+dj]:
+                        if self.alive[i+di][j+dj]:
                             liveNeighbours+=1
                     except IndexError:
                         pass
         return liveNeighbours
 
     def tick(self):
-        updated = alive
-        for i in range(width):
-            for j in range(height):
-                if alive[i][j]:
+        updated = self.alive
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.alive[i][j]:
                     # if less than two live neighbours, cell dies
                     if self.countLiveNeighbours(i,j) < 2:
                         updated[i][j] = False
@@ -38,4 +38,22 @@ class grid:
                     # if 3 live neighbours, cell comes to live
                     if self.countLiveNeighbours(i,j) == 3:
                         updated[i][j] = True
-        alive = updated
+        self.alive = updated
+
+if __name__=="__main__":
+
+    plt.axes()
+    field = grid(50,50)
+    field.randomPopulate(0.5)
+
+    for i in range(field.width):
+        for j in range(field.height):
+            if field.alive[i][j]:
+                color = "b"
+            else:
+                color = "w"
+            pixel = plt.Rectangle( (i*10,j*10), 10,10, fc=color )
+            plt.gca().add_patch(pixel)
+
+    plt.axis("scaled")
+    plt.show()
