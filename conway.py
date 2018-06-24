@@ -15,6 +15,9 @@ class grid:
             for j in range(self.height):
                 self.alive[i,j] = 1 if random.uniform(0.,1.)<density else 0
 
+    def populate(self, seed):
+        self.alive = np.loadtxt(seed, dtype=1)
+
     def countLiveNeighbours(self, i,j):
         liveNeighbours=0
         for di in range(-1,2):
@@ -48,6 +51,7 @@ class grid:
 parser = argparse.ArgumentParser()
 parser.add_argument("--format", nargs=2, metavar=("width", "height"), help="specify width and height")
 parser.add_argument("--density", help="specify density of live cells in random seed")
+parser.add_argument("--seed", help="specify text file  or 'random' as seed")
 args = parser.parse_args()
 
 if args.format:
@@ -62,7 +66,10 @@ else:
     density = 0.1
 
 field = grid(WIDTH, HEIGHT)
-field.randomPopulate(density)
+if (not args.seed) or args.seed=="random":
+    field.randomPopulate(density)
+else:
+    field.populate( args.seed )
 
 fig = plt.figure()
 data = field.alive
