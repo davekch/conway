@@ -46,14 +46,14 @@ class grid:
 if __name__=="__main__":
 
     field = grid(50,50)
-    field.randomPopulate(0.05)
+    field.randomPopulate(0.08)
 
     fig = plt.figure()
     data = field.alive
-    im = plt.imshow(data, cmap='gist_gray_r', vmin=0, vmax=1)
+    im = plt.imshow(data, cmap='YlGn', vmin=0, vmax=1)
 
     def init():
-        im.set_data(np.zeros((50, 50)))
+        im.set_data(np.zeros(( field.width, field.height )))
 
     def animate(i):
         field.tick()
@@ -61,6 +61,6 @@ if __name__=="__main__":
         im.set_data(data)
         return im
 
-    anim = animation.FuncAnimation(fig, animate, init_func=init, frames=50 * 50,
-                                   interval=50)
+    anim = animation.FuncAnimation(fig, animate, init_func=init,
+        frames=field.width*field.height, interval=50)
     plt.show()
