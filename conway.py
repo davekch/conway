@@ -2,6 +2,7 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import animation
+import argparse
 
 class grid:
     def __init__(self, x,y):
@@ -43,24 +44,39 @@ class grid:
                         updated[i,j] = 1
         self.alive = updated
 
-if __name__=="__main__":
 
-    field = grid(50,50)
-    field.randomPopulate(0.08)
+parser = argparse.ArgumentParser()
+parser.add_argument("--format", nargs=2, metavar=("width", "height"), help="specify width and height")
+parser.add_argument("--density", help="specify density of live cells in random seed")
+args = parser.parse_args()
 
-    fig = plt.figure()
+if args.format:
+    WIDTH = int(args.format[0])
+    HEIGHT = int(args.format[1])
+else:
+    WIDTH = 70
+    HEIGHT = 70
+if args.density:
+    density = float(args.density)
+else:
+    density = 0.1
+
+field = grid(WIDTH, HEIGHT)
+field.randomPopulate(density)
+
+fig = plt.figure()
+data = field.alive
+im = plt.imshow(data, cmap='YlGn', vmin=0, vmax=1)
+
+def init():
+    im.set_data(np.zeros(( WIDTH, HEIGHT )))
+
+def animate(i):
+    field.tick()
     data = field.alive
-    im = plt.imshow(data, cmap='YlGn', vmin=0, vmax=1)
+    im.set_data(data)
+    return im
 
-    def init():
-        im.set_data(np.zeros(( field.width, field.height )))
-
-    def animate(i):
-        field.tick()
-        data = field.alive
-        im.set_data(data)
-        return im
-
-    anim = animation.FuncAnimation(fig, animate, init_func=init,
-        frames=field.width*field.height, interval=50)
-    plt.show()
+anim = animation.FuncAnimation(fig, animate, init_func=init,
+    frames=WIDTH*HEIGHT, interval=50)
+plt.show()
