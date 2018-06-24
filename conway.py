@@ -20,7 +20,7 @@ class grid:
             for dj in range(-1,2):
                 if not (di==0 and dj==0):
                     try:
-                        if self.alive[i+di, j+dj]:
+                        if self.alive[i+di, j+dj]==1:
                             liveNeighbours+=1
                     except IndexError:
                         pass
@@ -30,50 +30,37 @@ class grid:
         updated = self.alive
         for i in range(self.width):
             for j in range(self.height):
-                if self.alive[i][j]:
+                if self.alive[i,j]==1:
                     # if less than two live neighbours, cell dies
                     if self.countLiveNeighbours(i,j) < 2:
-                        updated[i][j] = False
+                        updated[i,j] = 0
                     # if more than 3 live neighbours, cell dies
                     elif self.countLiveNeighbours(i,j) > 3:
-                        updated[i][j] = False
+                        updated[i,j] = 0
                 else:
                     # if 3 live neighbours, cell comes to live
                     if self.countLiveNeighbours(i,j) == 3:
-                        updated[i][j] = True
+                        updated[i,j] = 1
         self.alive = updated
 
 if __name__=="__main__":
 
-    fig = plt.figure()
-    plt.axis()
-    ax = plt.gca()
-    #ax.set_aspect(1)
-
     field = grid(50,50)
-    field.randomPopulate(0.5)
+    field.randomPopulate(0.05)
 
-    for i in range(field.width):
-        for j in range(field.height):
-            pixel=plt.Rectangle( (i*10,j*10), 10,10 )
-            ax.add_patch(pixel)
+    fig = plt.figure()
+    data = field.alive
+    im = plt.imshow(data, cmap='gist_gray_r', vmin=0, vmax=1)
 
     def init():
-        return []
+        im.set_data(np.zeros((50, 50)))
 
     def animate(i):
         field.tick()
-        patches = []
-        for i in range(field.width):
-            for j in range(field.height):
-                if field.alive[i][j]:
-                    color = "b"
-                else:
-                    color = "w"
-                pixel = plt.Rectangle( (i*10,j*10), 10,10, fc=color )
-                patches.append(ax.add_patch(pixel))
-        return patches
+        data = field.alive
+        im.set_data(data)
+        return im
 
-    plt.axis("scaled")
-    anim = animation.FuncAnimation( fig, animate, init_func=init, frames=30, interval=1, blit=True )
+    anim = animation.FuncAnimation(fig, animate, init_func=init, frames=50 * 50,
+                                   interval=50)
     plt.show()
