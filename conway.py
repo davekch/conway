@@ -1,4 +1,5 @@
 import random
+import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import animation
 
@@ -6,19 +7,20 @@ class grid:
     def __init__(self, x,y):
         self.width  = x
         self.height = y
-        self.alive = []
+        self.alive = np.zeros((x,y))
 
     def randomPopulate(self, density):
         for i in range(self.width):
-            self.alive.append( [ random.uniform(0.,1.)<density for i in range(self.height) ] )
+            for j in range(self.height):
+                self.alive[i,j] = 1 if random.uniform(0.,1.)<density else 0
 
     def countLiveNeighbours(self, i,j):
         liveNeighbours=0
         for di in range(-1,2):
             for dj in range(-1,2):
-                if (not (di==0 and dj==0)):
+                if not (di==0 and dj==0):
                     try:
-                        if self.alive[i+di][j+dj]:
+                        if self.alive[i+di, j+dj]:
                             liveNeighbours+=1
                     except IndexError:
                         pass
