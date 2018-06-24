@@ -1,5 +1,6 @@
 import random
 from matplotlib import pyplot as plt
+from matplotlib import animation
 
 class grid:
     def __init__(self, x,y):
@@ -42,18 +43,35 @@ class grid:
 
 if __name__=="__main__":
 
-    plt.axes()
+    fig = plt.figure()
+    plt.axis()
+    ax = plt.gca()
+    #ax.set_aspect(1)
+
     field = grid(50,50)
     field.randomPopulate(0.5)
 
     for i in range(field.width):
         for j in range(field.height):
-            if field.alive[i][j]:
-                color = "b"
-            else:
-                color = "w"
-            pixel = plt.Rectangle( (i*10,j*10), 10,10, fc=color )
-            plt.gca().add_patch(pixel)
+            pixel=plt.Rectangle( (i*10,j*10), 10,10 )
+            ax.add_patch(pixel)
+
+    def init():
+        return []
+
+    def animate(i):
+        field.tick()
+        patches = []
+        for i in range(field.width):
+            for j in range(field.height):
+                if field.alive[i][j]:
+                    color = "b"
+                else:
+                    color = "w"
+                pixel = plt.Rectangle( (i*10,j*10), 10,10, fc=color )
+                patches.append(ax.add_patch(pixel))
+        return patches
 
     plt.axis("scaled")
+    anim = animation.FuncAnimation( fig, animate, init_func=init, frames=30, interval=1, blit=True )
     plt.show()
