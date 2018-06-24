@@ -16,7 +16,7 @@ class grid:
                 self.alive[i,j] = 1 if random.uniform(0.,1.)<density else 0
 
     def populate(self, seed):
-        self.alive = np.loadtxt(seed)
+        self.alive = np.loadtxt(seed, dtype=np.int)
         self.width, self.height = self.alive.shape
 
     def countLiveNeighbours(self, i,j):
@@ -43,7 +43,7 @@ class grid:
                     elif self.countLiveNeighbours(i,j) > 3:
                         updated[i,j] = 0
                 else:
-                    # if 3 live neighbours, cell comes to live
+                    # if 3 live neighbours, cell comes to life
                     if self.countLiveNeighbours(i,j) == 3:
                         updated[i,j] = 1
         self.alive = updated
