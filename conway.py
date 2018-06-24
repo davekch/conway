@@ -16,7 +16,8 @@ class grid:
                 self.alive[i,j] = 1 if random.uniform(0.,1.)<density else 0
 
     def populate(self, seed):
-        self.alive = np.loadtxt(seed, dtype=1)
+        self.alive = np.loadtxt(seed)
+        self.width, self.height = self.alive.shape
 
     def countLiveNeighbours(self, i,j):
         liveNeighbours=0
@@ -70,6 +71,8 @@ if (not args.seed) or args.seed=="random":
     field.randomPopulate(density)
 else:
     field.populate( args.seed )
+    WIDTH = field.width
+    HEIGHT = field.height
 
 fig = plt.figure()
 data = field.alive
