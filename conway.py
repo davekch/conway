@@ -3,6 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import animation
 import argparse
+import copy
 
 class grid:
     def __init__(self, x,y):
@@ -32,7 +33,7 @@ class grid:
         return liveNeighbours
 
     def tick(self):
-        updated = self.alive
+        updated = copy.deepcopy(self.alive)
         for i in range(self.width):
             for j in range(self.height):
                 if self.alive[i,j]==1:
@@ -76,7 +77,7 @@ else:
 
 fig = plt.figure()
 data = field.alive
-im = plt.imshow(data, cmap='YlGn', vmin=0, vmax=1)
+im = plt.imshow(data, cmap='YlGn', vmin=0, vmax=1, interpolation="none")
 
 def init():
     im.set_data(np.zeros(( WIDTH, HEIGHT )))
@@ -88,5 +89,5 @@ def animate(i):
     return im
 
 anim = animation.FuncAnimation(fig, animate, init_func=init,
-    frames=WIDTH*HEIGHT, interval=50)
+    frames=WIDTH*HEIGHT, interval=80)
 plt.show()
