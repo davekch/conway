@@ -1,19 +1,20 @@
 import random
 import numpy as np
-import copy
+cimport numpy as np
+cimport cython
 
 def randomPopulate(width,height, density):
-    alive = np.zeros((width,height))
+    alive = np.zeros((width,height), dtype=np.int32)
     for i in range(width):
         for j in range(height):
             alive[i,j] = 1 if random.uniform(0.,1.)<density else 0
     return alive
 
 def populate(seed):
-    alive = np.loadtxt(seed, dtype=np.int)
+    alive = np.loadtxt(seed, dtype=np.int32)
     return alive
 
-def countLiveNeighbours(alive, int i, int j):
+cdef int countLiveNeighbours(alive, int i, int j):
     cdef int liveNeighbours=0
     cdef int di
     cdef int dj
@@ -28,10 +29,8 @@ def countLiveNeighbours(alive, int i, int j):
     return liveNeighbours
 
 # takes 2d-numpyarray and returns one
-def tick( alive ):
-    cdef int width, height
-    width, height = alive.shape
-    updated = copy.deepcopy(alive)
+cpdef int[:,:] tick( alive, int width, int height ):
+    updated = np.copy(alive)
     cdef int i
     cdef int j
     for i in range(width):

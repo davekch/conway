@@ -35,7 +35,8 @@ def init():
 
 def animate(i):
     global field
-    field = cycon.tick(field)
+    w,h = field.shape
+    field = cycon.tick(field, w,h)
     im.set_data(field)
     return im
 
