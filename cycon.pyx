@@ -1,8 +1,5 @@
 import random
 import numpy as np
-from matplotlib import pyplot as plt
-from matplotlib import animation
-import argparse
 import copy
 
 def randomPopulate(width,height, density):
@@ -16,7 +13,7 @@ def populate(seed):
     alive = np.loadtxt(seed, dtype=np.int)
     return alive
 
-cdef int countLiveNeighbours(alive, int i, int j):
+def countLiveNeighbours(alive, int i, int j):
     cdef int liveNeighbours=0
     cdef int di
     cdef int dj
@@ -31,7 +28,7 @@ cdef int countLiveNeighbours(alive, int i, int j):
     return liveNeighbours
 
 # takes 2d-numpyarray and returns one
-cdef tick( alive ):
+def tick( alive ):
     cdef int width, height
     width, height = alive.shape
     updated = copy.deepcopy(alive)

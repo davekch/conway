@@ -1,54 +1,8 @@
-import random
-import numpy as np
+import cycon
+import argparse
 from matplotlib import pyplot as plt
 from matplotlib import animation
-import argparse
-import copy
-
-class grid:
-    def __init__(self, x,y):
-        self.width  = x
-        self.height = y
-        self.alive = np.zeros((x,y))
-
-    def randomPopulate(self, density):
-        for i in range(self.width):
-            for j in range(self.height):
-                self.alive[i,j] = 1 if random.uniform(0.,1.)<density else 0
-
-    def populate(self, seed):
-        self.alive = np.loadtxt(seed, dtype=np.int)
-        self.width, self.height = self.alive.shape
-
-    def countLiveNeighbours(self, i,j):
-        liveNeighbours=0
-        for di in range(-1,2):
-            for dj in range(-1,2):
-                if not (di==0 and dj==0):
-                    try:
-                        if self.alive[i+di, j+dj]==1:
-                            liveNeighbours+=1
-                    except IndexError:
-                        pass
-        return liveNeighbours
-
-    def tick(self):
-        updated = copy.deepcopy(self.alive)
-        for i in range(self.width):
-            for j in range(self.height):
-                if self.alive[i,j]==1:
-                    # if less than two live neighbours, cell dies
-                    if self.countLiveNeighbours(i,j) < 2:
-                        updated[i,j] = 0
-                    # if more than 3 live neighbours, cell dies
-                    elif self.countLiveNeighbours(i,j) > 3:
-                        updated[i,j] = 0
-                else:
-                    # if 3 live neighbours, cell comes to life
-                    if self.countLiveNeighbours(i,j) == 3:
-                        updated[i,j] = 1
-        self.alive = updated
-
+import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--format", nargs=2, metavar=("width", "height"), help="specify width and height")
@@ -67,25 +21,22 @@ if args.density:
 else:
     density = 0.1
 
-field = grid(WIDTH, HEIGHT)
 if (not args.seed) or args.seed=="random":
-    field.randomPopulate(density)
+    field = cycon.randomPopulate(WIDTH, HEIGHT, density)
 else:
-    field.populate( args.seed )
-    WIDTH = field.width
-    HEIGHT = field.height
+    field = cycon.populate( args.seed )
+    WIDTH, HEIGHT = field.shape
 
 fig = plt.figure()
-data = field.alive
-im = plt.imshow(data, cmap='YlGn', vmin=0, vmax=1, interpolation="none")
+im = plt.imshow(field, cmap='YlGn', vmin=0, vmax=1, interpolation="none")
 
 def init():
     im.set_data(np.zeros(( WIDTH, HEIGHT )))
 
 def animate(i):
-    field.tick()
-    data = field.alive
-    im.set_data(data)
+    global field
+    field = cycon.tick(field)
+    im.set_data(field)
     return im
 
 anim = animation.FuncAnimation(fig, animate, init_func=init,
