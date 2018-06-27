@@ -1,2 +1,5 @@
 seeds/newEmptySeed.txt
 seeds/
+build/
+*.c
+*.so
