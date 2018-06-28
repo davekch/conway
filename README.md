@@ -3,7 +3,7 @@
 Take a seed for Conway's Game of Life and watch it evolve live.
 Written in Python using Cython
 
-![live](life.png)
+![live](life.gif)
 
 ### Usage
  - Random seed:
@@ -16,7 +16,7 @@ Seeds from files must consist of a rectangular grid of 0s and 1s, seperated by s
 ### Building
 Requires `matplotlib`, `numpy` and `cython`
 ```
-git clone
+git clone https://github.com/davekch/conway.git
 cd conway
 python setup.py build_ext --inplace
 ```
