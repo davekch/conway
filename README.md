@@ -11,7 +11,9 @@ Written in Python using Cython
  - Seed from file:
     `python conway.py --seed seeds/spaceship.txt`
 
-Seeds from files must consist of a rectangular grid of 0s and 1s, seperated by spaces.
+See `python conway.py --help` for more.
+
+Seeds from files must consist of a rectangular grid of 0s and 1s, seperated by spaces. You can create some using the scripts `seeds/createEmptySeed.py` and `seeds/createGeometricSeed.py`.
 
 ### Building
 Requires `matplotlib`, `numpy` and `cython`
