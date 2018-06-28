@@ -5,7 +5,7 @@ WIDTH, HEIGHT = int(sys.argv[1]), int(sys.argv[2])
 with open("geometric.txt", "w") as f:
     for j in range(HEIGHT):
         for i in range(WIDTH):
-            if i%4==0 or j%5==0:
+            if j==i+100 or j==i-100 or j==-i+100 or j==-i+298:
                 f.write("1 ")
             else:
                 f.write("0 ")
