@@ -35,15 +35,14 @@ cpdef int[:,:] tick( alive, int width, int height ):
     cdef int j
     for i in range(width):
         for j in range(height):
+            liveNeighbours = countLiveNeighbours(alive, i,j)
             if alive[i,j]==1:
                 # if less than two live neighbours, cell dies
-                if countLiveNeighbours(alive, i,j) < 2:
-                    updated[i,j] = 0
                 # if more than 3 live neighbours, cell dies
-                elif countLiveNeighbours(alive, i,j) > 3:
+                if liveNeighbours < 2 or liveNeighbours > 3:
                     updated[i,j] = 0
             else:
                 # if 3 live neighbours, cell comes to life
-                if countLiveNeighbours(alive, i,j) == 3:
+                if liveNeighbours == 3:
                     updated[i,j] = 1
     return updated
