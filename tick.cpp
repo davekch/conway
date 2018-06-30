@@ -35,11 +35,12 @@ public:
         vector<vector<int>> updated = alive;
         for(int i;i<alive.size();++i){
             for(int j;j<alive[0].size();++j){
+                int liveNeighbours = countLiveNeighbours(i,j);
                 if(alive[i][j]==1){
-                    if(countLiveNeighbours(alive,i,j)<2) updated[i][j]=0;
-                    else if(countLiveNeighbours(alive,i,j)>3) updated[i][j]=0;
+                    if(liveNeighbours<2) updated[i][j]=0;
+                    else if(liveNeighbours>3) updated[i][j]=0;
                 } else {
-                    if(countLiveNeighbours(alive,i,j)==3) updated[i][j]=1;
+                    if(liveNeighbours==3) updated[i][j]=1;
                 }
             }
         }
@@ -47,6 +48,15 @@ public:
     }
 
     void save(){
-        cnpy::npy_save("field.npy", &alive, {alive.size(),alive[0].size()}, "w");
+        cnpy::npy_save("field.npy", &alive[0][0], {alive.size(),alive[0].size()}, "w");
     }
+};
+
+int main(){
+
+    grid field;
+    field.randomPopulate();
+    field.save();
+
+    return 0;
 }
