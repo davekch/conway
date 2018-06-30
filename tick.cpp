@@ -52,11 +52,10 @@ public:
     }
 };
 
-int main(){
 
-    grid field;
-    field.randomPopulate();
-    field.save();
-
-    return 0;
+extern "C" {
+    grid* grid_new(){ return new grid(); }
+    void grid_randomPopulate(grid* field){ field->randomPopulate(); }
+    void grid_tick(grid* field){ field->tick(); }
+    void grid_save(grid* field){ field->save(); }
 }
