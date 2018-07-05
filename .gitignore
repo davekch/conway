@@ -1,4 +1,5 @@
 build/
 *.c
 *.so
+*.o
 field.npy

@@ -21,4 +21,10 @@ Requires `matplotlib`, `numpy` and `cython`
 git clone https://github.com/davekch/conway.git
 cd conway
 python setup.py build_ext --inplace
+
+g++ -c -fPIC foo.cpp -o foo.o
+g++ -shared -Wl,-soname,libfoo.so -o libfoo.so  foo.o
+g++ -o tick tick.cpp -L/usr/local/lib/ -lcnpy -lz --std=c++11
+
+g++ tick.o -shared -o libtick.so -no-pie -Wl,--whole-archive /usr/local/lib/libcnpy.a -Wl,--no-whole-archive
 ```

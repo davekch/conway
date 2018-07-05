@@ -1,6 +1,6 @@
 from ctypes import cdll
 lib = cdll.LoadLibrary('./libfoo.so')
-grid = cdll.LoadLibrary('./libgrid.so')
+grid = cdll.LoadLibrary('./libtick.so')
 
 class Foo(object):
     def __init__(self):
