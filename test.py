@@ -1,6 +1,6 @@
 from ctypes import cdll
 lib = cdll.LoadLibrary('./libfoo.so')
-grid = cdll.LoadLibrary('./libtick.so')
+gridlib = cdll.LoadLibrary('./libtick.so')
 
 class Foo(object):
     def __init__(self):
@@ -15,16 +15,16 @@ class Foo(object):
 
 class grid(object):
     def __init__(self):
-        self.obj = grid.grid_new()
+        self.obj = gridlib.grid_new()
 
     def randomPopulate(self):
-        grid.grid_randomPopulate(self.obj)
+        gridlib.grid_randomPopulate(self.obj)
 
     def tick(self):
-        grid.grid_tick(self.obj)
+        gridlib.grid_tick(self.obj)
 
     def save(self):
-        grid.grid_save(self.obj)
+        gridlib.grid_save(self.obj)
 
 
 field = grid()
