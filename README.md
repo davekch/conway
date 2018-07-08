@@ -27,4 +27,8 @@ g++ -shared -Wl,-soname,libfoo.so -o libfoo.so  foo.o
 g++ -o tick tick.cpp -L/usr/local/lib/ -lcnpy -lz --std=c++11
 
 g++ tick.o -shared -o libtick.so -no-pie -Wl,--whole-archive /usr/local/lib/libcnpy.a -Wl,--no-whole-archive
+
+working:
+g++ -c -fPIC tick.cpp -o tick.o --std=c++11
+g++ -shared -Wl,-soname,libtick.so -o libtick.so tick.o -lcnpy -lz
 ```
