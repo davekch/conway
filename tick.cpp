@@ -13,21 +13,14 @@ public:
         vector<vector<int>> newvec;
         uniform_real_distribution<double> uni(0, 1);
         default_random_engine engine;
-        for(int i=0;i<10;++i){
+        for(int i=0;i<500;++i){
             vector<int> line;
-            for(int j=0;j<10;++j){
-                uni(engine)<0.1 ? line.push_back(1) : line.push_back(0);
+            for(int j=0;j<500;++j){
+                uni(engine)<0.2 ? line.push_back(1) : line.push_back(0);
             }
             newvec.push_back(line);
         }
         alive = newvec;
-        cout<<endl<<"size: "<<alive.size()<<"x"<<alive[0].size()<<endl;
-        for(int i=0;i<10;++i){
-            for(int j=0;j<10;++j){
-                cout<<alive[i][j]<<" ";
-            }
-            cout<<endl;
-        }
     }
 
     int countLiveNeighbours(int i,int j){
@@ -63,7 +56,17 @@ public:
     }
 
     void save(){
-        cnpy::npy_save("field.npy", &alive[0][0], {alive.size(),alive[0].size()}, "w");
+        size_t N = alive.size();
+        size_t M = alive[0].size();
+        vector<int> raw(N*M);
+
+        for(int row = 0;row < N; row++) {
+           for(int col = 0;col < M; col++) {
+              raw[row*M+col] = alive[row][col];
+           }
+        }
+
+        cnpy::npy_save("field.npy",&raw[0],{N,M},"w");
     }
 };
 
