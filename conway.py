@@ -1,45 +1,65 @@
-import cycon
+from ctypes import cdll
+gridlib = cdll.LoadLibrary('./libtick.so')
+
 import argparse
 from matplotlib import pyplot as plt
 from matplotlib import animation
 import numpy as np
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--format", nargs=2, metavar=("width", "height"), help="specify width and height")
-parser.add_argument("--density", help="specify density of live cells in random seed")
-parser.add_argument("--seed", help="specify text file  or 'random' as seed")
-args = parser.parse_args()
+class grid(object):
+    def __init__(self):
+        self.obj = gridlib.grid_new()
 
-if args.format:
-    WIDTH = int(args.format[0])
-    HEIGHT = int(args.format[1])
-else:
-    WIDTH = 70
-    HEIGHT = 70
-if args.density:
-    density = float(args.density)
-else:
-    density = 0.1
+    def randomPopulate(self):
+        gridlib.grid_randomPopulate(self.obj)
 
-if (not args.seed) or args.seed=="random":
-    field = cycon.randomPopulate(WIDTH, HEIGHT, density)
-else:
-    field = cycon.populate( args.seed )
-    WIDTH, HEIGHT = field.shape
+    def tick(self):
+        gridlib.grid_tick(self.obj)
 
-fig = plt.figure()
-im = plt.imshow(field, cmap='YlGn', vmin=0, vmax=1, interpolation="none")
+    def save(self):
+        gridlib.grid_save(self.obj)
 
-def init():
-    im.set_data(np.zeros(( WIDTH, HEIGHT )))
 
-def animate(i):
-    global field
-    w,h = field.shape
-    field = cycon.tick(field, w,h)
-    im.set_data(field)
-    return im
+if __name__=="__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--format", nargs=2, metavar=("width", "height"), help="specify width and height")
+    parser.add_argument("--density", help="specify density of live cells in random seed")
+    parser.add_argument("--seed", help="specify text file  or 'random' as seed")
+    args = parser.parse_args()
 
-anim = animation.FuncAnimation(fig, animate, init_func=init,
-    frames=WIDTH*HEIGHT, interval=80)
-plt.show()
+    if args.format:
+        WIDTH = int(args.format[0])
+        HEIGHT = int(args.format[1])
+    else:
+        WIDTH = 1000
+        HEIGHT = 1000
+    if args.density:
+        density = float(args.density)
+    else:
+        density = 0.1
+
+    field = grid()
+    if (not args.seed) or args.seed=="random":
+        field.randomPopulate()
+    # else:
+    #     field = cycon.populate( args.seed )
+    #     WIDTH, HEIGHT = field.shape
+
+    field.save() # produces field.npy
+
+    fig = plt.figure()
+    im = plt.imshow( np.load("field.npy") , cmap='YlGn', vmin=0, vmax=1, interpolation="none")
+
+    def init():
+        im.set_data(np.zeros(( WIDTH, HEIGHT )))
+
+    def animate(i):
+        global field
+        field.tick()
+        field.save()
+        im.set_data( np.load("field.npy") )
+        return im
+
+    anim = animation.FuncAnimation(fig, animate, init_func=init,
+        frames=WIDTH*HEIGHT, interval=80)
+    plt.show()
