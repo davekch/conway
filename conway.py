@@ -1,5 +1,5 @@
 from ctypes import cdll
-gridlib = cdll.LoadLibrary('./libtick.so')
+gridLib = cdll.LoadLibrary('./libtick.so')
 
 import argparse
 from matplotlib import pyplot as plt
@@ -8,16 +8,16 @@ import numpy as np
 
 class grid(object):
     def __init__(self):
-        self.obj = gridlib.grid_new()
+        self.obj = gridLib.grid_new()
 
-    def randomPopulate(self):
-        gridlib.grid_randomPopulate(self.obj)
+    def randomPopulate(self, density):
+        gridLib.grid_randomPopulate(self.obj, density)
 
     def tick(self):
-        gridlib.grid_tick(self.obj)
+        gridLib.grid_tick(self.obj)
 
     def save(self):
-        gridlib.grid_save(self.obj)
+        gridLib.grid_save(self.obj)
 
 
 if __name__=="__main__":
@@ -34,13 +34,13 @@ if __name__=="__main__":
         WIDTH = 1000
         HEIGHT = 1000
     if args.density:
-        density = float(args.density)
+        density = int(args.density)
     else:
-        density = 0.1
+        density = 10
 
     field = grid()
     if (not args.seed) or args.seed=="random":
-        field.randomPopulate()
+        field.randomPopulate(density)
     # else:
     #     field = cycon.populate( args.seed )
     #     WIDTH, HEIGHT = field.shape
