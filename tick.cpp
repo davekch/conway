@@ -9,13 +9,13 @@ private:
     vector<vector<int>> alive;
     int step = 0;
 public:
-    void randomPopulate(int density){
+    void randomPopulate(int width, int height, int density){
         vector<vector<int>> newvec;
         uniform_real_distribution<double> uni(0, 1);
         default_random_engine engine;
-        for(int i=0;i<500;++i){
+        for(int i=0;i<width;++i){
             vector<int> line;
-            for(int j=0;j<500;++j){
+            for(int j=0;j<height;++j){
                 uni(engine)<density/100. ? line.push_back(1) : line.push_back(0);
             }
             newvec.push_back(line);
@@ -73,7 +73,7 @@ public:
 
 extern "C" {
     grid* grid_new(){ return new grid(); }
-    void grid_randomPopulate(grid* field, int d){ field->randomPopulate(d); }
+    void grid_randomPopulate(grid* field, int w, int h, int d){ field->randomPopulate(w,h,d); }
     void grid_tick(grid* field){ field->tick(); }
     void grid_save(grid* field){ field->save(); }
 }

@@ -10,8 +10,8 @@ class grid(object):
     def __init__(self):
         self.obj = gridLib.grid_new()
 
-    def randomPopulate(self, density):
-        gridLib.grid_randomPopulate(self.obj, density)
+    def randomPopulate(self, width, heigt, density):
+        gridLib.grid_randomPopulate(self.obj, width, heigt, density)
 
     def tick(self):
         gridLib.grid_tick(self.obj)
@@ -31,8 +31,8 @@ if __name__=="__main__":
         WIDTH = int(args.format[0])
         HEIGHT = int(args.format[1])
     else:
-        WIDTH = 1000
-        HEIGHT = 1000
+        WIDTH = 500
+        HEIGHT = 500
     if args.density:
         density = int(args.density)
     else:
@@ -40,7 +40,7 @@ if __name__=="__main__":
 
     field = grid()
     if (not args.seed) or args.seed=="random":
-        field.randomPopulate(density)
+        field.randomPopulate(WIDTH, HEIGHT, density)
     # else:
     #     field = cycon.populate( args.seed )
     #     WIDTH, HEIGHT = field.shape
