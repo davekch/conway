@@ -13,6 +13,9 @@ class grid(object):
     def randomPopulate(self, width, heigt, density):
         gridLib.grid_randomPopulate(self.obj, width, heigt, density)
 
+    def populate(self):
+        gridLib.grid_populate(self.obj)
+
     def tick(self):
         gridLib.grid_tick(self.obj)
 
@@ -41,9 +44,11 @@ if __name__=="__main__":
     field = grid()
     if (not args.seed) or args.seed=="random":
         field.randomPopulate(WIDTH, HEIGHT, density)
-    # else:
-    #     field = cycon.populate( args.seed )
-    #     WIDTH, HEIGHT = field.shape
+    else:
+        seed = np.loadtxt(args.seed, dtype=np.int32)
+        WIDTH, HEIGHT = seed.shape
+        np.save("field.npy", seed)
+        field.populate()
 
     field.save() # produces field.npy
 

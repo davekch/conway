@@ -23,6 +23,21 @@ public:
         alive = newvec;
     }
 
+    void populate(){
+        cnpy::NpyArray arr = cnpy::npy_load("field.npy");
+        int* data = arr.data<int>();
+        // vector<vector<int>> vec;
+        size_t rows = arr.shape[0];
+        size_t cols = arr.shape[1];
+        alive.reserve(rows);
+        for(size_t row=0; row<rows; row++){
+            alive.emplace_back(cols);
+            for(size_t col=0; col<cols; col++){
+                alive[row][col] = data[row*rows+col];
+            }
+        }
+    }
+
     int countLiveNeighbours(int i,int j){
         int liveNeighbours=0;
         for(int di=-1;di<2;++di){
@@ -74,6 +89,7 @@ public:
 extern "C" {
     grid* grid_new(){ return new grid(); }
     void grid_randomPopulate(grid* field, int w, int h, int d){ field->randomPopulate(w,h,d); }
+    void grid_populate(grid* field){ field->populate(); }
     void grid_tick(grid* field){ field->tick(); }
     void grid_save(grid* field){ field->save(); }
 }
