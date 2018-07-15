@@ -1,5 +1,4 @@
 #include<random>
-#include<iostream>
 #include<vector>
 #include"cnpy.h"
 using namespace std;
@@ -26,7 +25,6 @@ public:
     void populate(){
         cnpy::NpyArray arr = cnpy::npy_load("field.npy");
         int* data = arr.data<int>();
-        // vector<vector<int>> vec;
         size_t rows = arr.shape[0];
         size_t cols = arr.shape[1];
         alive.reserve(rows);
@@ -67,7 +65,6 @@ public:
         }
         alive = updated;
         step++;
-        // cout<<step<<": Found "<<liveCells<<" live cells      "<<endl;
     }
 
     void save(){
