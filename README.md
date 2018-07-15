@@ -20,7 +20,7 @@ Seeds from files must consist of a rectangular grid of 0s and 1s, seperated by s
  - `matplotlib` and `numpy`
 
 **C++**
- - I use [Carl Roger](https://github.com/rogersce)'s amazing library [cnpy](https://github.com/rogersce/cnpy) to save and load numpy-arrays in C++. In the next section I assume that it is installed in `/usr/local/lib`.
+ - I use [Carl Rogers](https://github.com/rogersce)' amazing library [cnpy](https://github.com/rogersce/cnpy) to save and load numpy-arrays in C++. In the next section I assume that it is installed in `/usr/local/lib`.
 
 
  ### Building
