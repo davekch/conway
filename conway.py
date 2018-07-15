@@ -66,5 +66,6 @@ if __name__=="__main__":
         return im
 
     anim = animation.FuncAnimation(fig, animate, init_func=init,
-        frames=WIDTH*HEIGHT, interval=80)
+        frames=100, interval=80)
+    #anim.save("life.gif", writer='imagemagick', fps=10)
     plt.show()
